@@ -1,0 +1,91 @@
+{{!
+    @template mod_decisionforge/simulation_studio
+}}
+<div class="df-studio">
+    <aside class="df-studio__rail">
+        <div class="df-studio__mark"><span></span><strong>DF</strong></div>
+        <div class="df-studio__railtext">
+            <small>{{#str}}simulationstudio, mod_decisionforge{{/str}}</small>
+            <strong>{{name}}</strong>
+        </div>
+        <a class="df-studio__tool df-studio__tool--active" href="#df-stage-canvas"><span>⌘</span>{{#str}}routecanvas, mod_decisionforge{{/str}}</a>
+        <a class="df-studio__tool" href="{{previewurl}}"><span>▶</span>{{#str}}livepreview, mod_decisionforge{{/str}}</a>
+        <a class="df-studio__tool" href="{{reporturl}}"><span>◎</span>{{#str}}reports, mod_decisionforge{{/str}}</a>
+        <a class="df-studio__tool" href="{{gradebookurl}}"><span>↗</span>{{#str}}opengradebook, mod_decisionforge{{/str}}</a>
+        {{#canaibuild}}<a class="df-studio__tool df-studio__tool--ai" href="{{aibuilderurl}}"><span>✦</span>{{#str}}buildwithai, mod_decisionforge{{/str}}</a>{{/canaibuild}}
+        <a class="df-studio__add" href="{{addurl}}"><span>+</span>{{#str}}addstage, mod_decisionforge{{/str}}</a>
+    </aside>
+
+    <main class="df-studio__canvas" id="df-stage-canvas">
+        <div class="df-studio__canvaslabel">
+            <div><span class="df-studio__pulse"></span>{{missionlabel}}</div>
+            <div class="df-studio__zoom">{{stagecount}} {{#str}}stages, mod_decisionforge{{/str}}</div>
+        </div>
+        {{#hasstages}}
+            <div class="df-flow">
+                {{#stages}}
+                    <article class="df-flow__node df-flow__node--{{kind}} {{#inactive}}df-flow__node--inactive{{/inactive}}">
+                        <div class="df-flow__port df-flow__port--in"></div>
+                        <div class="df-flow__nodehead">
+                            <span class="df-flow__number">{{number}}</span>
+                            <span class="df-flow__kind">{{kindlabel}}</span>
+                            {{#inactive}}<span class="df-flow__draft">{{#str}}inactive, mod_decisionforge{{/str}}</span>{{/inactive}}
+                            <div class="df-flow__nodeactions">
+                                {{#canmoveup}}<form method="post" action="{{moveupurl}}"><input type="hidden" name="sesskey" value="{{sesskey}}"><button aria-label="{{#str}}moveup, mod_decisionforge{{/str}}">↑</button></form>{{/canmoveup}}
+                                {{#canmovedown}}<form method="post" action="{{movedownurl}}"><input type="hidden" name="sesskey" value="{{sesskey}}"><button aria-label="{{#str}}movedown, mod_decisionforge{{/str}}">↓</button></form>{{/canmovedown}}
+                                <a href="{{editurl}}" aria-label="{{#str}}edit{{/str}}">✎</a>
+                            </div>
+                        </div>
+                        <h3>{{title}}</h3>
+                        <p>{{body}}</p>
+                        <div class="df-flow__signals">
+                            {{#hasscore}}<span>{{points}} {{#str}}pointsshort, mod_decisionforge{{/str}}</span>{{/hasscore}}
+                            {{#choicecount}}<span>{{choicecount}} {{#str}}choices, mod_decisionforge{{/str}}</span>{{/choicecount}}
+                            {{#evidencecount}}<span>{{evidencecount}} {{#str}}evidenceitems, mod_decisionforge{{/str}}</span>{{/evidencecount}}
+                            {{#hasbranches}}<span class="df-flow__branch">{{branchcount}} {{#str}}routes, mod_decisionforge{{/str}}</span>{{/hasbranches}}
+                        </div>
+                        <div class="df-flow__route"><small>{{#str}}routesinto, mod_decisionforge{{/str}}</small><strong>{{nextlabel}}</strong></div>
+                        <form class="df-flow__delete" method="post" action="{{deleteurl}}"><input type="hidden" name="sesskey" value="{{sesskey}}"><button type="submit" aria-label="{{#str}}delete{{/str}}">×</button></form>
+                        <div class="df-flow__port df-flow__port--out"></div>
+                    </article>
+                    {{#canmovedown}}<div class="df-flow__connector"><span></span></div>{{/canmovedown}}
+                {{/stages}}
+                <a class="df-flow__newnode" href="{{addurl}}"><span>+</span><strong>{{#str}}addstage, mod_decisionforge{{/str}}</strong><small>{{#str}}addstagehint, mod_decisionforge{{/str}}</small></a>
+            </div>
+        {{/hasstages}}
+        {{#nostages}}
+            <div class="df-studio__empty">
+                <div class="df-studio__emptyorbit"><span></span><i></i><b></b></div>
+                <h2>{{#str}}buildfirstsimulation, mod_decisionforge{{/str}}</h2>
+                <p>{{#str}}buildfirstsimulationhelp, mod_decisionforge{{/str}}</p>
+                {{#canaibuild}}<a class="btn btn-primary" href="{{aibuilderurl}}">✦ {{#str}}buildwithai, mod_decisionforge{{/str}}</a>{{/canaibuild}}
+                <a class="btn btn-primary" href="{{seedurl}}">{{#str}}installreferencesimulation, mod_decisionforge{{/str}}</a>
+                <a class="btn btn-link" href="{{addurl}}">{{#str}}startfromblank, mod_decisionforge{{/str}}</a>
+            </div>
+        {{/nostages}}
+    </main>
+
+    <aside class="df-studio__inspector">
+        <div class="df-studio__status {{#ready}}df-studio__status--ready{{/ready}}">
+            <small>{{#str}}simulationhealth, mod_decisionforge{{/str}}</small>
+            {{#ready}}<strong><span>✓</span>{{#str}}readyforlearners, mod_decisionforge{{/str}}</strong>{{/ready}}
+            {{#haswarnings}}<strong><span>!</span>{{warningcount}} {{#str}}configurationissues, mod_decisionforge{{/str}}</strong>{{/haswarnings}}
+        </div>
+        {{#haswarnings}}<div class="df-studio__warnings">{{#warnings}}<p>{{text}}</p>{{/warnings}}</div>{{/haswarnings}}
+        <section>
+            <small>{{#str}}startingconditions, mod_decisionforge{{/str}}</small>
+            <div class="df-studio__metric"><span>{{#str}}metricsafety, mod_decisionforge{{/str}}</span><b>{{initialsafety}}</b><i style="--v:{{initialsafety}}%"></i></div>
+            <div class="df-studio__metric"><span>{{#str}}metriccompliance, mod_decisionforge{{/str}}</span><b>{{initialcompliance}}</b><i style="--v:{{initialcompliance}}%"></i></div>
+            <div class="df-studio__metric"><span>{{#str}}metrictrust, mod_decisionforge{{/str}}</span><b>{{initialtrust}}</b><i style="--v:{{initialtrust}}%"></i></div>
+            <div class="df-studio__metric"><span>{{#str}}metricresources, mod_decisionforge{{/str}}</span><b>{{initialresources}}</b><i style="--v:{{initialresources}}%"></i></div>
+        </section>
+        <div class="df-studio__legend">
+            <small>{{#str}}stagepalette, mod_decisionforge{{/str}}</small>
+            <span class="is-briefing">{{#str}}stagekindbriefing, mod_decisionforge{{/str}}</span>
+            <span class="is-evidence">{{#str}}stagekindevidence, mod_decisionforge{{/str}}</span>
+            <span class="is-decision">{{#str}}stagekinddecision, mod_decisionforge{{/str}}</span>
+            <span class="is-prioritise">{{#str}}stagekindprioritise, mod_decisionforge{{/str}}</span>
+            <span class="is-reflection">{{#str}}stagekindreflection, mod_decisionforge{{/str}}</span>
+        </div>
+    </aside>
+</div>

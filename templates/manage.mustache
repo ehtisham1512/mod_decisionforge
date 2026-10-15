@@ -1,0 +1,85 @@
+{{!
+    @template mod_decisionforge/manage
+}}
+<div class="decisionforge-shell decisionforge-manage">
+    <header class="decisionforge-pagehead">
+        <div>
+            <span class="decisionforge-eyebrow">{{name}}</span>
+            <h2>{{#str}}managecases, mod_decisionforge{{/str}}</h2>
+            <p>{{#str}}modulename_help, mod_decisionforge{{/str}}</p>
+        </div>
+        <div class="decisionforge-pagehead__actions">
+            {{#canuseai}}<a class="btn decisionforge-ai-launch" href="{{aibuilderurl}}"><span>✦</span> {{#str}}aiquickbuild, mod_decisionforge{{/str}}</a>{{/canuseai}}
+            <a class="btn btn-outline-secondary" href="{{viewurl}}">{{#str}}preview, mod_decisionforge{{/str}}</a>
+            <a class="btn btn-outline-secondary" href="{{gradebookurl}}">{{#str}}opengradebook, mod_decisionforge{{/str}}</a>
+            <a class="btn btn-outline-secondary" href="{{reporturl}}">{{#str}}reports, mod_decisionforge{{/str}}</a>
+            <a class="btn btn-primary" href="{{addurl}}">+ {{#str}}addcase, mod_decisionforge{{/str}}</a>
+        </div>
+    </header>
+
+    <div class="decisionforge-authorstats">
+        <div><span>{{#str}}cases, mod_decisionforge{{/str}}</span><strong>{{casecount}}</strong></div>
+        <div><span>{{#str}}active, mod_decisionforge{{/str}}</span><strong>{{activecount}}</strong></div>
+        <div><span>{{#str}}totalcasepoints, mod_decisionforge{{/str}}</span><strong>{{totalpoints}}</strong></div>
+    </div>
+
+    {{#hascases}}
+        <div class="decisionforge-casecards">
+            {{#cases}}
+                <article class="decisionforge-authorcase {{#inactive}}decisionforge-authorcase--inactive{{/inactive}}">
+                    <div class="decisionforge-authorcase__handle" aria-hidden="true"><span></span><span></span><span></span></div>
+                    <div class="decisionforge-authorcase__number">{{number}}</div>
+                    {{#hasimage}}<img class="decisionforge-authorcase__image" src="{{imageurl}}" alt="">{{/hasimage}}
+                    {{^hasimage}}<div class="decisionforge-authorcase__image decisionforge-authorcase__image--empty" aria-hidden="true"><span></span></div>{{/hasimage}}
+                    <div class="decisionforge-authorcase__body">
+                        <div class="decisionforge-authorcase__meta">
+                            {{#active}}<span class="badge badge-success">{{#str}}active, mod_decisionforge{{/str}}</span>{{/active}}
+                            {{#inactive}}{{^archived}}<span class="badge badge-secondary">{{#str}}inactive, mod_decisionforge{{/str}}</span>{{/archived}}{{/inactive}}
+                            {{#archived}}<span class="badge badge-secondary">{{#str}}archived, mod_decisionforge{{/str}}</span>{{/archived}}
+                            <span>{{points}} {{#str}}points, mod_decisionforge{{/str}}</span>
+                            <span>{{optioncount}} {{#str}}actions, mod_decisionforge{{/str}}</span>
+                        </div>
+                        <h3>{{title}}</h3>
+                        <p>{{scenario}}</p>
+                    </div>
+                    <div class="decisionforge-authorcase__order">
+                        {{#canmoveup}}
+                            <form action="{{moveupurl}}" method="post"><input type="hidden" name="sesskey" value="{{sesskey}}"><button type="submit" title="{{#str}}moveup, mod_decisionforge{{/str}}" aria-label="{{#str}}moveup, mod_decisionforge{{/str}}">↑</button></form>
+                        {{/canmoveup}}
+                        {{#canmovedown}}
+                            <form action="{{movedownurl}}" method="post"><input type="hidden" name="sesskey" value="{{sesskey}}"><button type="submit" title="{{#str}}movedown, mod_decisionforge{{/str}}" aria-label="{{#str}}movedown, mod_decisionforge{{/str}}">↓</button></form>
+                        {{/canmovedown}}
+                    </div>
+                    <div class="decisionforge-authorcase__actions">
+                        {{#editable}}<a class="btn btn-sm btn-primary" href="{{editurl}}">{{#str}}edit{{/str}}</a>{{/editable}}
+                        <form action="{{duplicateurl}}" method="post"><input type="hidden" name="sesskey" value="{{sesskey}}"><button class="btn btn-sm btn-outline-secondary" type="submit">{{#str}}duplicatecase, mod_decisionforge{{/str}}</button></form>
+                        {{#editable}}
+                            <form action="{{toggleurl}}" method="post"><input type="hidden" name="sesskey" value="{{sesskey}}"><button class="btn btn-sm btn-outline-secondary" type="submit">{{#active}}{{#str}}disable, mod_decisionforge{{/str}}{{/active}}{{#inactive}}{{#str}}enable, mod_decisionforge{{/str}}{{/inactive}}</button></form>
+                            <a class="btn btn-sm btn-outline-danger" href="{{deleteurl}}">{{#str}}delete{{/str}}</a>
+                        {{/editable}}
+                    </div>
+                </article>
+            {{/cases}}
+        </div>
+    {{/hascases}}
+
+    {{#nocases}}
+        <section class="decisionforge-empty">
+            <div class="decisionforge-empty__visual" aria-hidden="true"><span></span><span></span><span></span></div>
+            <h3>{{#str}}nocases, mod_decisionforge{{/str}}</h3>
+            <p>{{#str}}modulename_help, mod_decisionforge{{/str}}</p>
+            <div>
+                {{#canuseai}}<a class="btn decisionforge-ai-launch" href="{{aibuilderurl}}"><span>✦</span> {{#str}}aiquickbuild, mod_decisionforge{{/str}}</a>{{/canuseai}}
+                <a class="btn btn-primary" href="{{addurl}}">{{#str}}addfirstcase, mod_decisionforge{{/str}}</a>
+                <a class="btn btn-outline-secondary" href="{{sampleurl}}">{{#str}}addsamples, mod_decisionforge{{/str}}</a>
+            </div>
+        </section>
+    {{/nocases}}
+
+    {{#hascases}}
+        <div class="decisionforge-managefooter">
+            <a class="btn btn-outline-secondary" href="{{sampleurl}}">+ {{#str}}addsamples, mod_decisionforge{{/str}}</a>
+            <a class="btn btn-primary" href="{{addurl}}">+ {{#str}}addcase, mod_decisionforge{{/str}}</a>
+        </div>
+    {{/hascases}}
+</div>

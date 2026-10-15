@@ -1,0 +1,61 @@
+{{!
+    @template mod_decisionforge/report
+}}
+<div class="decisionforge-shell decisionforge-report">
+    <header class="decisionforge-pagehead">
+        <div>
+            <span class="decisionforge-eyebrow">{{name}}</span>
+            <h2>{{#str}}attemptreport, mod_decisionforge{{/str}}</h2>
+            <p>{{total}} {{#str}}attempts, mod_decisionforge{{/str}}</p>
+        </div>
+        <div class="decisionforge-pagehead__actions">
+            <a class="btn btn-outline-secondary" href="{{viewurl}}">{{#str}}backtoactivity, mod_decisionforge{{/str}}</a>
+            <a class="btn btn-outline-secondary" href="{{gradebookurl}}">{{#str}}opengradebook, mod_decisionforge{{/str}}</a>
+            <a class="btn btn-primary" href="{{manageurl}}">{{#str}}managecases, mod_decisionforge{{/str}}</a>
+        </div>
+    </header>
+
+    {{#hasrows}}
+        <div class="table-responsive decisionforge-reporttable-wrap">
+            <table class="table decisionforge-reporttable">
+                <thead>
+                    <tr>
+                        <th>{{#str}}participant, mod_decisionforge{{/str}}</th>
+                        <th>{{#str}}attempt, mod_decisionforge{{/str}}</th>
+                        <th>{{#str}}status, mod_decisionforge{{/str}}</th>
+                        <th>{{#str}}finalgrade, mod_decisionforge{{/str}}</th>
+                        <th>{{#str}}started, mod_decisionforge{{/str}}</th>
+                        <th>{{#str}}duration, mod_decisionforge{{/str}}</th>
+                        <th><span class="sr-only">{{#str}}actions{{/str}}</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#rows}}
+                        <tr>
+                            <td><div class="decisionforge-usercell">{{{userpic}}}<strong>{{fullname}}</strong></div></td>
+                            <td>
+                                <strong>#{{attemptnumber}}</strong>
+                                <small class="d-block text-muted">{{modelabel}}</small>
+                            </td>
+                            <td>
+                                {{#completedwithoutpass}}<span class="decisionforge-status decisionforge-status--finished">{{#str}}completed, mod_decisionforge{{/str}}</span>{{/completedwithoutpass}}
+                                {{#passed}}<span class="decisionforge-status decisionforge-status--finished">{{#str}}passed, mod_decisionforge{{/str}}</span>{{/passed}}
+                                {{#notpassed}}<span class="decisionforge-status decisionforge-status--progress">{{#str}}notpassed, mod_decisionforge{{/str}}</span>{{/notpassed}}
+                                {{#inprogress}}<span class="decisionforge-status decisionforge-status--progress">{{#str}}inprogress, mod_decisionforge{{/str}}</span>{{/inprogress}}
+                                {{#hasoutcome}}<small class="d-block mt-1">{{outcome}}</small>{{/hasoutcome}}
+                            </td>
+                            <td><strong>{{grade}}</strong> / {{maxgrade}}</td>
+                            <td><span title="{{started}}">{{started}}</span></td>
+                            <td>{{duration}}</td>
+                            <td class="text-right">
+                                {{#canview}}<a class="btn btn-sm btn-outline-primary" href="{{viewurl}}">{{#str}}viewattempt, mod_decisionforge{{/str}}</a>{{/canview}}
+                                {{#candelete}}<a class="btn btn-sm btn-link text-danger" href="{{deleteurl}}">{{#str}}delete{{/str}}</a>{{/candelete}}
+                            </td>
+                        </tr>
+                    {{/rows}}
+                </tbody>
+            </table>
+        </div>
+    {{/hasrows}}
+    {{#norows}}<div class="decisionforge-empty"><h3>{{#str}}noattempts, mod_decisionforge{{/str}}</h3></div>{{/norows}}
+</div>

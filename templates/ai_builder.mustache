@@ -1,0 +1,99 @@
+{{!
+    @template mod_decisionforge/ai_builder
+}}
+<div class="df-ai" id="df-ai-builder">
+    <header class="df-ai__hero">
+        <div class="df-ai__orb"><span></span><i></i><b>AI</b></div>
+        <div>
+            <small>{{#str}}aibuilderlabel, mod_decisionforge{{/str}}</small>
+            <h2>{{#str}}aibuildertitle, mod_decisionforge{{/str}}</h2>
+            <p>{{#str}}aibuilderintro, mod_decisionforge{{/str}}</p>
+        </div>
+        <a href="{{studiourl}}">← {{#str}}backtostudio, mod_decisionforge{{/str}}</a>
+    </header>
+
+    {{#notconfigured}}
+        <section class="df-ai__configuration">
+            <span>!</span>
+            <div>
+                {{#disabled}}<h3>{{#str}}ainotenabledtitle, mod_decisionforge{{/str}}</h3><p>{{#str}}ainotenabled, mod_decisionforge{{/str}}</p>{{/disabled}}
+                {{#missingkey}}<h3>{{#str}}aiapikeymissingtitle, mod_decisionforge{{/str}}</h3><p>{{#str}}aiapikeymissing, mod_decisionforge{{/str}}</p>{{/missingkey}}
+            </div>
+            {{#canconfigure}}<a class="btn btn-primary" href="{{settingsurl}}">{{#str}}configureai, mod_decisionforge{{/str}}</a>{{/canconfigure}}
+        </section>
+    {{/notconfigured}}
+
+    {{#showform}}
+        {{#configured}}
+            <div class="df-ai__layout">
+                <main class="df-ai__form">
+                    {{{formhtml}}}
+                </main>
+                <aside class="df-ai__assurance">
+                    <small>{{#str}}aigenerationcontract, mod_decisionforge{{/str}}</small>
+                    <h3>{{#str}}aibuiltforreview, mod_decisionforge{{/str}}</h3>
+                    <ul>
+                        <li><span>✓</span>{{#str}}aistrictschema, mod_decisionforge{{/str}}</li>
+                        <li><span>✓</span>{{#str}}aiservervalidation, mod_decisionforge{{/str}}</li>
+                        <li><span>✓</span>{{#str}}aitransactionalimport, mod_decisionforge{{/str}}</li>
+                        <li><span>✓</span>{{#str}}ainostudentdata, mod_decisionforge{{/str}}</li>
+                    </ul>
+                    <p>{{#str}}aiexternalnotice, mod_decisionforge{{/str}}</p>
+                </aside>
+            </div>
+        {{/configured}}
+    {{/showform}}
+
+    {{#hasdraft}}
+        {{#draft}}
+            <section class="df-ai__previewhead">
+                <div><small>{{#str}}aidraftpreview, mod_decisionforge{{/str}}</small><h2>{{title}}</h2><p>{{summary}}</p></div>
+                <dl>
+                    <div><dt>{{#str}}stages, mod_decisionforge{{/str}}</dt><dd>{{stagecount}}</dd></div>
+                    <div><dt>{{#str}}points, mod_decisionforge{{/str}}</dt><dd>{{totalpoints}}</dd></div>
+                    <div><dt>{{#str}}aiprovider, mod_decisionforge{{/str}}</dt><dd>{{provider}}</dd></div>
+                    <div><dt>{{#str}}aimodel, mod_decisionforge{{/str}}</dt><dd>{{model}}</dd></div>
+                    <div><dt>{{#str}}aikeysource, mod_decisionforge{{/str}}</dt><dd>{{keysource}}</dd></div>
+                </dl>
+            </section>
+            <div class="df-ai__reviewnotice"><span>!</span><p>{{#str}}aireviewnotice, mod_decisionforge{{/str}}</p></div>
+            <section class="df-ai__stagepreview">
+                {{#stages}}
+                    <article class="df-ai-stage df-ai-stage--{{kind}}">
+                        <header><span>{{number}}</span><small>{{kindlabel}}</small>{{#hasscore}}<b>{{points}} {{#str}}points, mod_decisionforge{{/str}}</b>{{/hasscore}}</header>
+                        <h3>{{title}}</h3>
+                        <p>{{body}}</p>
+                        {{#hasprompt}}<blockquote>{{prompt}}</blockquote>{{/hasprompt}}
+                        {{#haschoices}}<div class="df-ai-stage__choices">{{#choices}}<div><strong>{{text}}</strong>{{#isdecision}}<small>{{quality}}% · {{#str}}route, mod_decisionforge{{/str}} {{route}}</small><p>{{consequence}}</p><em>S {{safety}} · C {{compliance}} · T {{trust}} · R {{resources}}</em>{{/isdecision}}{{#isprioritise}}<small>{{#str}}targetrank, mod_decisionforge{{/str}} {{rank}}</small>{{/isprioritise}}</div>{{/choices}}</div>{{/haschoices}}
+                        {{#hasevidence}}<div class="df-ai-stage__evidence">{{#evidence}}<div><span>{{kindlabel}}</span>{{#critical}}<b>{{#str}}critical, mod_decisionforge{{/str}}</b>{{/critical}}<strong>{{title}}</strong><p>{{body}}</p></div>{{/evidence}}</div>{{/hasevidence}}
+                        <footer><small>{{#str}}defaultnextstage, mod_decisionforge{{/str}}</small><strong>{{route}}</strong></footer>
+                    </article>
+                {{/stages}}
+            </section>
+        {{/draft}}
+        <section class="df-ai__publish">
+            <div><small>{{#str}}aifinalcheck, mod_decisionforge{{/str}}</small><h3>{{#str}}aicreatesimulation, mod_decisionforge{{/str}}</h3><p>{{#str}}aicreatehelp, mod_decisionforge{{/str}}</p></div>
+            <form method="post" action="{{importurl}}" data-region="ai-import-form">
+                <input type="hidden" name="id" value="{{id}}">
+                <input type="hidden" name="draftid" value="{{draftid}}">
+                <input type="hidden" name="action" value="import">
+                <input type="hidden" name="sesskey" value="{{sesskey}}">
+                {{#hasexisting}}<label class="df-ai__replace"><input type="checkbox" name="replaceconfirmed" value="1" required><span>{{#str}}aireplaceexisting, mod_decisionforge, {{existingcount}}{{/str}}</span></label>{{/hasexisting}}
+                <button class="df-ai__create" type="submit"><span>{{#str}}aicreatesimulation, mod_decisionforge{{/str}}</span><b>→</b></button>
+            </form>
+            <form method="post" action="{{importurl}}">
+                <input type="hidden" name="id" value="{{id}}">
+                <input type="hidden" name="draftid" value="{{draftid}}">
+                <input type="hidden" name="action" value="discard">
+                <input type="hidden" name="sesskey" value="{{sesskey}}">
+                <button class="btn btn-link" type="submit">{{#str}}aidiscardandrestart, mod_decisionforge{{/str}}</button>
+            </form>
+        </section>
+    {{/hasdraft}}
+
+    <div class="df-ai__loading" data-region="ai-loading" aria-live="polite" aria-hidden="true">
+        <div><span></span><i></i><b>AI</b></div>
+        <h3>{{#str}}aigenerating, mod_decisionforge{{/str}}</h3>
+        <p>{{#str}}aigeneratinghelp, mod_decisionforge{{/str}}</p>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+{{!
+    @template mod_decisionforge/simulation_feedback
+}}
+<div class="df-consequence">
+    <div class="df-consequence__waves" aria-hidden="true"><span></span><i></i><b></b></div>
+    <section class="df-consequence__card">
+        <div class="df-consequence__index"><span>↳</span><div><small>{{kindlabel}}</small><strong>{{stagetitle}}</strong></div></div>
+        <p class="df-consequence__eyebrow">{{#str}}decisionecho, mod_decisionforge{{/str}}</p>
+        {{#haschoice}}<div class="df-consequence__choice">{{{choice}}}</div>{{/haschoice}}
+        {{#hasconsequence}}<div class="df-consequence__reveal"><small>{{#str}}whatyousetmotion, mod_decisionforge{{/str}}</small><div>{{{consequence}}}</div></div>{{/hasconsequence}}
+        <div class="df-consequence__deltas">
+            {{#impacts}}<div class="{{#positive}}is-positive{{/positive}}{{#negative}}is-negative{{/negative}}{{#neutral}}is-neutral{{/neutral}}"><span>{{label}}</span><strong>{{value}}</strong></div>{{/impacts}}
+        </div>
+        {{#hasscore}}<div class="df-consequence__score"><span>{{#str}}decisionquality, mod_decisionforge{{/str}}</span><strong>{{score}}<i>/ {{maxscore}}</i></strong></div>{{/hasscore}}
+        <a class="df-consequence__continue" href="{{nexturl}}"><span>{{buttonlabel}}</span><b>→</b></a>
+    </section>
+    <aside class="df-consequence__telemetry">
+        <small>{{#str}}newoperatingstate, mod_decisionforge{{/str}}</small>
+        <div><span>{{#str}}metricsafety, mod_decisionforge{{/str}}</span><strong>{{safety}}</strong><i style="--v:{{safety}}%"></i></div>
+        <div><span>{{#str}}metriccompliance, mod_decisionforge{{/str}}</span><strong>{{compliance}}</strong><i style="--v:{{compliance}}%"></i></div>
+        <div><span>{{#str}}metrictrust, mod_decisionforge{{/str}}</span><strong>{{trust}}</strong><i style="--v:{{trust}}%"></i></div>
+        <div><span>{{#str}}metricresources, mod_decisionforge{{/str}}</span><strong>{{resources}}</strong><i style="--v:{{resources}}%"></i></div>
+    </aside>
+</div>

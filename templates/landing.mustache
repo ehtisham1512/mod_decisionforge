@@ -1,0 +1,101 @@
+{{!
+    @template mod_decisionforge/landing
+}}
+<div class="decisionforge-shell decisionforge-landing">
+    <div class="decisionforge-hero">
+        <div class="decisionforge-hero__content">
+            <div class="decisionforge-eyebrow">
+                <span class="decisionforge-eyebrow__dot" aria-hidden="true"></span>
+                {{#str}}modulename, mod_decisionforge{{/str}}
+            </div>
+            <h2 class="decisionforge-hero__title">{{name}}</h2>
+            {{#hasintro}}<div class="decisionforge-hero__intro">{{{intro}}}</div>{{/hasintro}}
+        </div>
+        <div class="decisionforge-hero__visual" aria-hidden="true">
+            <div class="decisionforge-orbit decisionforge-orbit--one"></div>
+            <div class="decisionforge-orbit decisionforge-orbit--two"></div>
+            <div class="decisionforge-forge-icon">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </div>
+
+    {{#isteacher}}
+        <nav class="decisionforge-teacherbar" aria-label="{{#str}}pluginadministration, mod_decisionforge{{/str}}">
+            <div>
+                <strong>{{#str}}pluginadministration, mod_decisionforge{{/str}}</strong>
+                <span>{{casecount}} {{#str}}cases, mod_decisionforge{{/str}}</span>
+            </div>
+            <div class="decisionforge-teacherbar__actions">
+                <a class="btn btn-outline-secondary" href="{{gradebookurl}}">{{#str}}opengradebook, mod_decisionforge{{/str}}</a>
+                <a class="btn btn-outline-secondary" href="{{reporturl}}">{{#str}}reports, mod_decisionforge{{/str}}</a>
+                <a class="btn btn-primary" href="{{manageurl}}">{{#str}}managecases, mod_decisionforge{{/str}}</a>
+            </div>
+        </nav>
+    {{/isteacher}}
+
+    <div class="decisionforge-statgrid">
+        <div class="decisionforge-stat">
+            <span class="decisionforge-stat__icon decisionforge-stat__icon--cases" aria-hidden="true"></span>
+            <span class="decisionforge-stat__value">{{casecount}}</span>
+            <span class="decisionforge-stat__label">{{#str}}cases, mod_decisionforge{{/str}}</span>
+        </div>
+        <div class="decisionforge-stat">
+            <span class="decisionforge-stat__icon decisionforge-stat__icon--time" aria-hidden="true"></span>
+            <span class="decisionforge-stat__value">{{timelimit}}</span>
+            <span class="decisionforge-stat__label">{{#str}}timelimit, mod_decisionforge{{/str}}</span>
+        </div>
+        <div class="decisionforge-stat">
+            <span class="decisionforge-stat__icon decisionforge-stat__icon--attempt" aria-hidden="true"></span>
+            <span class="decisionforge-stat__value">{{attemptslabel}}</span>
+            <span class="decisionforge-stat__label">{{#str}}attemptsallowed, mod_decisionforge{{/str}}</span>
+        </div>
+        <div class="decisionforge-stat">
+            <span class="decisionforge-stat__icon decisionforge-stat__icon--grade" aria-hidden="true"></span>
+            <span class="decisionforge-stat__value">{{maxgrade}}</span>
+            <span class="decisionforge-stat__label">{{#str}}maximumgrade, mod_decisionforge{{/str}}</span>
+        </div>
+    </div>
+
+    {{#hasinstructions}}
+        <section class="decisionforge-instructions">
+            <div class="decisionforge-section-icon" aria-hidden="true">i</div>
+            <div>
+                <h3>{{#str}}instructions, mod_decisionforge{{/str}}</h3>
+                <div>{{{instructions}}}</div>
+            </div>
+        </section>
+    {{/hasinstructions}}
+
+    <section class="decisionforge-launchcard">
+        <div>
+            <span class="decisionforge-launchcard__label">{{#str}}attempt, mod_decisionforge{{/str}}</span>
+            {{#hasinprogress}}
+                <h3>{{#str}}continueattempt, mod_decisionforge{{/str}}</h3>
+                <p>{{#str}}inprogress, mod_decisionforge{{/str}}</p>
+            {{/hasinprogress}}
+            {{^hasinprogress}}
+                <h3>{{#str}}attemptnow, mod_decisionforge{{/str}}</h3>
+                {{#hasremaining}}<p>{{remaining}} {{#str}}attempts, mod_decisionforge{{/str}}</p>{{/hasremaining}}
+            {{/hasinprogress}}
+        </div>
+        <div class="decisionforge-launchcard__actions">
+            {{#hasinprogress}}
+                <a class="btn btn-primary btn-lg decisionforge-primary-action" href="{{continueurl}}">{{#str}}continueattempt, mod_decisionforge{{/str}} <span aria-hidden="true">→</span></a>
+            {{/hasinprogress}}
+            {{#canstart}}
+                <form action="{{starturl}}" method="post">
+                    <input type="hidden" name="sesskey" value="{{sesskey}}">
+                    <button class="btn btn-primary btn-lg decisionforge-primary-action" type="submit">{{#str}}attemptnow, mod_decisionforge{{/str}} <span aria-hidden="true">→</span></button>
+                </form>
+            {{/canstart}}
+            {{#haslatest}}
+                <a class="btn btn-link" href="{{latesturl}}">{{#str}}viewresults, mod_decisionforge{{/str}}: {{latestscore}}/{{latestmax}}</a>
+            {{/haslatest}}
+        </div>
+    </section>
+
+    {{#unavailable}}<div class="alert alert-warning mt-4" role="status">{{availabilityreason}}</div>{{/unavailable}}
+    {{#attemptlimitreached}}<div class="alert alert-info mt-4" role="status">{{#str}}attemptlimitreached, mod_decisionforge{{/str}}</div>{{/attemptlimitreached}}
+    {{#nocases}}<div class="alert alert-info mt-4" role="status">{{#str}}nocasesstudent, mod_decisionforge{{/str}}</div>{{/nocases}}
+</div>

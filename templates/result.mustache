@@ -1,0 +1,67 @@
+{{!
+    @template mod_decisionforge/result
+}}
+<div class="decisionforge-shell decisionforge-results">
+    <section class="decisionforge-resulthero decisionforge-resulthero--{{band}}">
+        <div class="decisionforge-score-ring" style="--decisionforge-score: {{percent}}" role="img" aria-label="{{percent}}%">
+            <div><strong>{{percent}}%</strong><span>{{#str}}overallscore, mod_decisionforge{{/str}}</span></div>
+        </div>
+        <div class="decisionforge-resulthero__copy">
+            <span class="decisionforge-eyebrow">{{#str}}attemptcomplete, mod_decisionforge{{/str}}</span>
+            <h2>{{name}}</h2>
+            {{#showparticipant}}<p class="decisionforge-participant">{{participant}} · {{#str}}attempt, mod_decisionforge{{/str}} {{attemptnumber}}</p>{{/showparticipant}}
+            {{#haspassinggrade}}
+                <p class="decisionforge-participant">
+                    {{#passed}}<strong>{{#str}}passed, mod_decisionforge{{/str}}</strong>{{/passed}}
+                    {{#notpassed}}<strong>{{#str}}notpassed, mod_decisionforge{{/str}}</strong>{{/notpassed}}
+                    · {{#str}}passinggrade, mod_decisionforge{{/str}}: {{passinggrade}}
+                </p>
+            {{/haspassinggrade}}
+            <p>{{message}}</p>
+            <div class="decisionforge-resultactions">
+                <a class="btn btn-outline-secondary" href="{{backurl}}">{{#str}}backtoactivity, mod_decisionforge{{/str}}</a>
+                {{#canreattempt}}
+                    <form action="{{starturl}}" method="post">
+                        <input type="hidden" name="sesskey" value="{{sesskey}}">
+                        <button class="btn btn-primary" type="submit">{{#str}}reattempt, mod_decisionforge{{/str}}</button>
+                    </form>
+                {{/canreattempt}}
+                {{#reportaccess}}<a class="btn btn-link" href="{{reporturl}}">{{#str}}attemptreport, mod_decisionforge{{/str}}</a>{{/reportaccess}}
+            </div>
+        </div>
+    </section>
+
+    <div class="decisionforge-resultstats">
+        <div><span>{{#str}}finalgrade, mod_decisionforge{{/str}}</span><strong>{{grade}} / {{maxgrade}}</strong></div>
+        <div><span>{{#str}}caseshandled, mod_decisionforge{{/str}}</span><strong>{{casecount}}</strong></div>
+        <div><span>{{#str}}bestchoices, mod_decisionforge{{/str}}</span><strong>{{bestcount}}</strong></div>
+        <div><span>{{#str}}duration, mod_decisionforge{{/str}}</span><strong>{{duration}}</strong></div>
+    </div>
+
+    {{#hasreviewcases}}
+        <section class="decisionforge-review">
+            <div class="decisionforge-review__heading">
+                <div><span class="decisionforge-eyebrow">{{#str}}feedback, mod_decisionforge{{/str}}</span><h3>{{#str}}reviewcases, mod_decisionforge{{/str}}</h3></div>
+            </div>
+            <div class="decisionforge-reviewlist">
+                {{#reviewcases}}
+                    <details class="decisionforge-reviewcase decisionforge-reviewcase--{{state}}">
+                        <summary>
+                            <span class="decisionforge-reviewcase__number">{{number}}</span>
+                            <span class="decisionforge-reviewcase__title"><strong>{{title}}</strong><small>{{statelabel}}</small></span>
+                            <span class="decisionforge-reviewcase__points">{{earned}} / {{possible}}</span>
+                            <span class="decisionforge-reviewcase__chevron" aria-hidden="true"></span>
+                        </summary>
+                        <div class="decisionforge-reviewcase__body">
+                            <div><small>{{#str}}decisionquestion, mod_decisionforge{{/str}}</small><p>{{question}}</p></div>
+                            <div><small>{{#str}}yourdecision, mod_decisionforge{{/str}}</small><div>{{{decision}}}</div></div>
+                            {{#hasjustification}}<div><small>{{#str}}yourreasoning, mod_decisionforge{{/str}}</small><p>{{justification}}</p></div>{{/hasjustification}}
+                            <div class="decisionforge-reviewcase__meta"><span>{{#str}}confidence, mod_decisionforge{{/str}}: <strong>{{confidence}}%</strong></span></div>
+                            {{#hasfeedback}}<div class="decisionforge-reviewcase__feedback"><small>{{#str}}feedback, mod_decisionforge{{/str}}</small><div>{{{feedback}}}</div></div>{{/hasfeedback}}
+                        </div>
+                    </details>
+                {{/reviewcases}}
+            </div>
+        </section>
+    {{/hasreviewcases}}
+</div>

@@ -1,0 +1,61 @@
+{{!
+    @template mod_decisionforge/simulation_landing
+}}
+<div class="df-dossier">
+    <div class="df-dossier__spine"><span>DF</span><i></i><small>{{#str}}confidentialcasefile, mod_decisionforge{{/str}}</small></div>
+    <div class="df-dossier__paper">
+        <section class="df-dossier__identity">
+            <div class="df-dossier__stamp"><span>{{#str}}live, mod_decisionforge{{/str}}</span><strong>{{stagecount}}</strong><small>{{#str}}stages, mod_decisionforge{{/str}}</small></div>
+            <div>
+                <span class="df-dossier__eyebrow">{{missionlabel}}</span>
+                <h2>{{name}}</h2>
+                {{#hasintro}}<div class="df-dossier__intro">{{{intro}}}</div>{{/hasintro}}
+            </div>
+            {{#isteacher}}<div class="df-dossier__teacher"><a href="{{studiourl}}">{{#str}}openstudio, mod_decisionforge{{/str}} ↗</a><a href="{{reporturl}}">{{#str}}reports, mod_decisionforge{{/str}}</a></div>{{/isteacher}}
+        </section>
+
+        <div class="df-dossier__grid">
+            <section class="df-dossier__brief">
+                <small>{{#str}}missionbrief, mod_decisionforge{{/str}}</small>
+                {{#hasinstructions}}<div>{{{instructions}}}</div>{{/hasinstructions}}
+                {{^hasinstructions}}<p>{{#str}}simulationdefaultbrief, mod_decisionforge{{/str}}</p>{{/hasinstructions}}
+                <div class="df-dossier__features">
+                    {{#hasevidence}}<span><i>01</i>{{#str}}evidenceanalysis, mod_decisionforge{{/str}}</span>{{/hasevidence}}
+                    {{#hasbranching}}<span><i>02</i>{{#str}}branchingdecisions, mod_decisionforge{{/str}}</span>{{/hasbranching}}
+                    {{#hasprioritise}}<span><i>03</i>{{#str}}priorityunderpressure, mod_decisionforge{{/str}}</span>{{/hasprioritise}}
+                    {{#hasreflection}}<span><i>04</i>{{#str}}defensiblejudgement, mod_decisionforge{{/str}}</span>{{/hasreflection}}
+                </div>
+            </section>
+
+            <section class="df-dossier__conditions">
+                <small>{{#str}}startingconditions, mod_decisionforge{{/str}}</small>
+                <div class="df-dossier__radar">
+                    <div style="--v:{{initialsafety}}"><span>{{#str}}metricsafety, mod_decisionforge{{/str}}</span><strong>{{initialsafety}}</strong></div>
+                    <div style="--v:{{initialcompliance}}"><span>{{#str}}metriccompliance, mod_decisionforge{{/str}}</span><strong>{{initialcompliance}}</strong></div>
+                    <div style="--v:{{initialtrust}}"><span>{{#str}}metrictrust, mod_decisionforge{{/str}}</span><strong>{{initialtrust}}</strong></div>
+                    <div style="--v:{{initialresources}}"><span>{{#str}}metricresources, mod_decisionforge{{/str}}</span><strong>{{initialresources}}</strong></div>
+                </div>
+                <dl>
+                    <div><dt>{{#str}}timelimit, mod_decisionforge{{/str}}</dt><dd>{{timelimit}}</dd></div>
+                    <div><dt>{{#str}}attemptsallowed, mod_decisionforge{{/str}}</dt><dd>{{attemptslabel}}</dd></div>
+                    <div><dt>{{#str}}maximumgrade, mod_decisionforge{{/str}}</dt><dd>{{maxgrade}}</dd></div>
+                </dl>
+            </section>
+        </div>
+
+        <section class="df-dossier__launch">
+            <div class="df-dossier__seal"><span></span><i></i><b></b></div>
+            <div>
+                {{#hasinprogress}}<small>{{#str}}activeoperation, mod_decisionforge{{/str}}</small><h3>{{#str}}resumecommand, mod_decisionforge{{/str}}</h3>{{/hasinprogress}}
+                {{^hasinprogress}}<small>{{#str}}readinessconfirmed, mod_decisionforge{{/str}}</small><h3>{{#str}}enterdecisionroom, mod_decisionforge{{/str}}</h3>{{/hasinprogress}}
+                <p>{{#str}}choiceschangeoutcome, mod_decisionforge{{/str}}</p>
+            </div>
+            {{#hasinprogress}}<a class="df-dossier__launchbutton" href="{{continueurl}}"><span>{{#str}}continuesimulation, mod_decisionforge{{/str}}</span><b>→</b></a>{{/hasinprogress}}
+            {{#canstart}}<form action="{{starturl}}" method="post"><input type="hidden" name="sesskey" value="{{sesskey}}"><button class="df-dossier__launchbutton" type="submit"><span>{{#str}}beginsimulation, mod_decisionforge{{/str}}</span><b>→</b></button></form>{{/canstart}}
+            {{#haslatest}}<a class="df-dossier__last" href="{{latesturl}}"><small>{{#str}}previousoutcome, mod_decisionforge{{/str}}</small><strong>{{latestoutcome}}</strong><span>{{latestgrade}} / {{maxgrade}}</span></a>{{/haslatest}}
+        </section>
+        {{#unavailable}}<div class="alert alert-warning mt-3">{{availabilityreason}}</div>{{/unavailable}}
+        {{#haswarnings}}<div class="alert alert-info mt-3">{{warningtext}}</div>{{/haswarnings}}
+    </div>
+</div>
+

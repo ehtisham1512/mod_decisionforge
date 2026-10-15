@@ -1,0 +1,89 @@
+{{!
+    @template mod_decisionforge/quick_ai_builder
+}}
+<div class="df-ai df-ai--quick" id="df-quick-ai-builder">
+    <header class="df-ai__hero">
+        <div class="df-ai__orb"><span></span><i></i><b>AI</b></div>
+        <div>
+            <small>{{#str}}aiquickbuilderlabel, mod_decisionforge{{/str}}</small>
+            <h2>{{#str}}aiquickbuildertitle, mod_decisionforge{{/str}}</h2>
+            <p>{{#str}}aiquickbuilderintro, mod_decisionforge{{/str}}</p>
+        </div>
+        <a href="{{casesurl}}">← {{#str}}aiquickbacktocases, mod_decisionforge{{/str}}</a>
+    </header>
+
+    {{#notconfigured}}
+        <section class="df-ai__configuration">
+            <span>!</span>
+            <div>
+                {{#disabled}}<h3>{{#str}}ainotenabledtitle, mod_decisionforge{{/str}}</h3><p>{{#str}}ainotenabled, mod_decisionforge{{/str}}</p>{{/disabled}}
+                {{#missingkey}}<h3>{{#str}}aiapikeymissingtitle, mod_decisionforge{{/str}}</h3><p>{{#str}}aiapikeymissing, mod_decisionforge{{/str}}</p>{{/missingkey}}
+            </div>
+            {{#canconfigure}}<a class="btn btn-primary" href="{{settingsurl}}">{{#str}}configureai, mod_decisionforge{{/str}}</a>{{/canconfigure}}
+        </section>
+    {{/notconfigured}}
+
+    {{#showform}}{{#configured}}
+        <div class="df-ai__layout">
+            <main class="df-ai__form">{{{formhtml}}}</main>
+            <aside class="df-ai__assurance">
+                <small>{{#str}}aigenerationcontract, mod_decisionforge{{/str}}</small>
+                <h3>{{#str}}aiquickbuiltforreview, mod_decisionforge{{/str}}</h3>
+                <ul>
+                    <li><span>✓</span>{{#str}}aiquickstrictschema, mod_decisionforge{{/str}}</li>
+                    <li><span>✓</span>{{#str}}aiservervalidation, mod_decisionforge{{/str}}</li>
+                    <li><span>✓</span>{{#str}}aitransactionalimport, mod_decisionforge{{/str}}</li>
+                    <li><span>✓</span>{{#str}}ainostudentdata, mod_decisionforge{{/str}}</li>
+                </ul>
+                <p>{{#str}}aiexternalnotice, mod_decisionforge{{/str}}</p>
+            </aside>
+        </div>
+    {{/configured}}{{/showform}}
+
+    {{#hasdraft}}{{#draft}}
+        <section class="df-ai__previewhead">
+            <div><small>{{#str}}aiquickdraftpreview, mod_decisionforge{{/str}}</small><h2>{{title}}</h2><p>{{summary}}</p></div>
+            <dl>
+                <div><dt>{{#str}}cases, mod_decisionforge{{/str}}</dt><dd>{{casecount}}</dd></div>
+                <div><dt>{{#str}}points, mod_decisionforge{{/str}}</dt><dd>{{totalpoints}}</dd></div>
+                <div><dt>{{#str}}aiprovider, mod_decisionforge{{/str}}</dt><dd>{{provider}}</dd></div>
+                <div><dt>{{#str}}aimodel, mod_decisionforge{{/str}}</dt><dd>{{model}}</dd></div>
+                <div><dt>{{#str}}aikeysource, mod_decisionforge{{/str}}</dt><dd>{{keysource}}</dd></div>
+            </dl>
+        </section>
+        <div class="df-ai__reviewnotice"><span>!</span><p>{{#str}}aiquickreviewnotice, mod_decisionforge{{/str}}</p></div>
+        <section class="df-ai__quickpreview">
+            {{#cases}}
+                <article class="df-ai-quickcase">
+                    <header><span>{{number}}</span><div><small>{{#str}}aiquickcase, mod_decisionforge{{/str}}</small><h3>{{title}}</h3></div><b>{{points}} {{#str}}points, mod_decisionforge{{/str}}</b></header>
+                    <div class="df-ai-quickcase__scenario"><small>{{#str}}scenario, mod_decisionforge{{/str}}</small><p>{{scenario}}</p></div>
+                    <blockquote>{{question}}</blockquote>
+                    <div class="df-ai-quickcase__options">
+                        {{#options}}<div class="{{#best}}is-best{{/best}}"><span>{{quality}}%</span><strong>{{text}}</strong><p>{{consequence}}</p></div>{{/options}}
+                    </div>
+                </article>
+            {{/cases}}
+        </section>
+    {{/draft}}
+        <section class="df-ai__publish df-ai__publish--quick">
+            <div><small>{{#str}}aiquickfinalcheck, mod_decisionforge{{/str}}</small><h3>{{#str}}aiquickcreateassessment, mod_decisionforge{{/str}}</h3><p>{{#str}}aiquickcreatehelp, mod_decisionforge{{/str}}</p></div>
+            <div class="df-ai__publishchoices">
+                <form method="post" action="{{importurl}}" data-region="ai-import-form">
+                    <input type="hidden" name="id" value="{{id}}"><input type="hidden" name="draftid" value="{{draftid}}"><input type="hidden" name="action" value="importappend"><input type="hidden" name="sesskey" value="{{sesskey}}">
+                    <button class="df-ai__create" type="submit"><span>{{#str}}aiquickimportappend, mod_decisionforge{{/str}}</span><b>→</b></button>
+                    <small>{{#str}}aiquickappendhelp, mod_decisionforge{{/str}}</small>
+                </form>
+                {{#hasexisting}}<form method="post" action="{{importurl}}" data-region="ai-import-form">
+                    <input type="hidden" name="id" value="{{id}}"><input type="hidden" name="draftid" value="{{draftid}}"><input type="hidden" name="action" value="importreplace"><input type="hidden" name="sesskey" value="{{sesskey}}">
+                    <label class="df-ai__replace"><input type="checkbox" name="replaceconfirmed" value="1" required><span>{{#str}}aiquickreplaceconfirm, mod_decisionforge, {{existingcount}}{{/str}}</span></label>
+                    <button class="btn btn-outline-danger" type="submit">{{#str}}aiquickimportreplace, mod_decisionforge{{/str}}</button>
+                </form>{{/hasexisting}}
+            </div>
+            <form method="post" action="{{importurl}}"><input type="hidden" name="id" value="{{id}}"><input type="hidden" name="draftid" value="{{draftid}}"><input type="hidden" name="action" value="discard"><input type="hidden" name="sesskey" value="{{sesskey}}"><button class="btn btn-link" type="submit">{{#str}}aidiscardandrestart, mod_decisionforge{{/str}}</button></form>
+        </section>
+    {{/hasdraft}}
+
+    <div class="df-ai__loading" data-region="ai-loading" aria-live="polite" aria-hidden="true">
+        <div><span></span><i></i><b>AI</b></div><h3>{{#str}}aiquickcreating, mod_decisionforge{{/str}}</h3><p>{{#str}}aiquickcreatinghelp, mod_decisionforge{{/str}}</p>
+    </div>
+</div>

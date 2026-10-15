@@ -1,0 +1,93 @@
+{{!
+    @template mod_decisionforge/attempt
+}}
+<main class="decisionforge-attempt" aria-labelledby="decisionforge-case-title">
+    <header class="decisionforge-attemptbar">
+        <div class="decisionforge-attemptbar__brand">
+            <span class="decisionforge-mini-mark" aria-hidden="true"></span>
+            <div>
+                <strong>{{name}}</strong>
+                <span>{{#str}}attempt, mod_decisionforge{{/str}} {{attemptnumber}}</span>
+            </div>
+        </div>
+        {{#showprogress}}
+            <div class="decisionforge-attemptbar__progress" aria-label="{{progresslabel}}">
+                <div><span>{{#str}}case, mod_decisionforge{{/str}} {{current}} / {{total}}</span><strong>{{progress}}%</strong></div>
+                <div class="decisionforge-progress"><span style="width: {{progress}}%"></span></div>
+            </div>
+        {{/showprogress}}
+        {{#hastimelimit}}
+            <div class="decisionforge-timer" data-region="timer" data-seconds="{{timeleft}}">
+                <span class="decisionforge-timer__icon" aria-hidden="true"></span>
+                <div><small>{{#str}}timeleft, mod_decisionforge{{/str}}</small><strong data-region="timer-value">{{timeleftformatted}}</strong></div>
+            </div>
+        {{/hastimelimit}}
+    </header>
+
+    <form id="decisionforge-response-form" class="decisionforge-casework" action="{{formurl}}" method="post" novalidate>
+        <input type="hidden" name="sesskey" value="{{sesskey}}">
+        <section class="decisionforge-casepanel">
+            <div class="decisionforge-panel-label"><span>1</span>{{#str}}readthecase, mod_decisionforge{{/str}}</div>
+            {{#hasimage}}
+                <figure class="decisionforge-caseimage">
+                    <img src="{{caseimage}}" alt="">
+                    <figcaption class="sr-only">{{casetitle}}</figcaption>
+                </figure>
+            {{/hasimage}}
+            {{^hasimage}}
+                <div class="decisionforge-caseimage decisionforge-caseimage--placeholder" aria-hidden="true">
+                    <span></span><span></span><span></span>
+                </div>
+            {{/hasimage}}
+            <div class="decisionforge-casecontent">
+                <span class="decisionforge-casecount">{{#str}}case, mod_decisionforge{{/str}} {{current}} {{#str}}of, moodle{{/str}} {{total}}</span>
+                <h1 id="decisionforge-case-title">{{casetitle}}</h1>
+                <div class="decisionforge-scenario">{{{scenario}}}</div>
+            </div>
+        </section>
+
+        <section class="decisionforge-decisionpanel">
+            <div class="decisionforge-panel-label"><span>2</span>{{#str}}chooseaction, mod_decisionforge{{/str}}</div>
+            <fieldset>
+                <legend>{{questiontext}}</legend>
+                <div class="decisionforge-options" data-region="options">
+                    {{#options}}
+                        <div class="decisionforge-option">
+                            <input id="decisionforge-option-{{id}}" type="radio" name="optionid" value="{{id}}" required>
+                            <label for="decisionforge-option-{{id}}">
+                                <span class="decisionforge-option__letter" aria-hidden="true">{{letter}}</span>
+                                <span class="decisionforge-option__text">{{{text}}}</span>
+                                <span class="decisionforge-option__check" aria-hidden="true">✓</span>
+                            </label>
+                        </div>
+                    {{/options}}
+                </div>
+                <div class="invalid-feedback" data-region="option-error">{{#str}}decisionrequired, mod_decisionforge{{/str}}</div>
+            </fieldset>
+
+            {{#requirejustification}}
+                <div class="decisionforge-reasoning">
+                    <label for="decisionforge-justification">{{#str}}whythisaction, mod_decisionforge{{/str}}</label>
+                    <textarea id="decisionforge-justification" name="justification" rows="3" maxlength="2000" required placeholder="{{#str}}justificationplaceholder, mod_decisionforge{{/str}}"></textarea>
+                    <small>0 / 2000</small>
+                </div>
+            {{/requirejustification}}
+
+            {{#requireconfidence}}
+                <div class="decisionforge-confidence">
+                    <div>
+                        <label for="decisionforge-confidence">{{#str}}confidencelabel, mod_decisionforge{{/str}}</label>
+                        <output for="decisionforge-confidence" data-region="confidence-value">50%</output>
+                    </div>
+                    <input id="decisionforge-confidence" type="range" name="confidence" min="0" max="100" value="50" step="1">
+                    <div class="decisionforge-confidence__scale"><span>0%</span><span>50%</span><span>100%</span></div>
+                </div>
+            {{/requireconfidence}}
+            {{^requireconfidence}}<input type="hidden" name="confidence" value="50">{{/requireconfidence}}
+
+            <button class="btn btn-primary btn-lg decisionforge-confirm" type="submit" data-region="submit">
+                {{#str}}confirmdecision, mod_decisionforge{{/str}} <span aria-hidden="true">→</span>
+            </button>
+        </section>
+    </form>
+</main>

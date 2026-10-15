@@ -1,0 +1,50 @@
+{{!
+    @template mod_decisionforge/simulation_result
+}}
+<div class="df-aar df-aar--{{outcomecode}}">
+    <aside class="df-aar__folio">
+        <span>DF / AAR</span><i></i><small>{{#str}}afteractionreport, mod_decisionforge{{/str}}</small>
+        <strong>{{attemptnumber}}</strong>
+    </aside>
+    <div class="df-aar__report">
+        <section class="df-aar__outcome">
+            <div class="df-aar__outcomemark"><span style="--score:{{percent}}%"><strong>{{percent}}</strong><i>%</i></span></div>
+            <div><small>{{missionlabel}}</small><h2>{{outcome}}</h2><p>{{outcomedescription}}</p>{{#showparticipant}}<span>{{participant}} · {{#str}}attempt, mod_decisionforge{{/str}} {{attemptnumber}}</span>{{/showparticipant}}</div>
+            <div class="df-aar__verdict">{{#passed}}<span>✓</span><strong>{{#str}}passed, mod_decisionforge{{/str}}</strong>{{/passed}}{{#notpassed}}<span>!</span><strong>{{#str}}notpassed, mod_decisionforge{{/str}}</strong>{{/notpassed}}{{#completedwithoutpass}}<span>✓</span><strong>{{#str}}completed, mod_decisionforge{{/str}}</strong>{{/completedwithoutpass}}{{#haspassinggrade}}<small>{{#str}}passinggrade, mod_decisionforge{{/str}} {{passinggrade}}</small>{{/haspassinggrade}}</div>
+        </section>
+
+        <section class="df-aar__metrics">
+            <div><small>{{#str}}finalgrade, mod_decisionforge{{/str}}</small><strong>{{grade}}<i>/{{maxgrade}}</i></strong></div>
+            <div><small>{{#str}}routevisited, mod_decisionforge{{/str}}</small><strong>{{routecount}}<i>{{#str}}stages, mod_decisionforge{{/str}}</i></strong></div>
+            <div><small>{{#str}}duration, mod_decisionforge{{/str}}</small><strong>{{duration}}</strong></div>
+        </section>
+
+        <section class="df-aar__state">
+            <div class="df-aar__statetitle"><small>{{#str}}finaloperatingstate, mod_decisionforge{{/str}}</small><h3>{{#str}}systemimpactprofile, mod_decisionforge{{/str}}</h3></div>
+            <div class="df-aar__stategrid">
+                <div style="--v:{{safety}}%"><span>{{#str}}metricsafety, mod_decisionforge{{/str}}</span><strong>{{safety}}</strong><i></i></div>
+                <div style="--v:{{compliance}}%"><span>{{#str}}metriccompliance, mod_decisionforge{{/str}}</span><strong>{{compliance}}</strong><i></i></div>
+                <div style="--v:{{trust}}%"><span>{{#str}}metrictrust, mod_decisionforge{{/str}}</span><strong>{{trust}}</strong><i></i></div>
+                <div style="--v:{{resources}}%"><span>{{#str}}metricresources, mod_decisionforge{{/str}}</span><strong>{{resources}}</strong><i></i></div>
+            </div>
+        </section>
+
+        <section class="df-aar__route">
+            <div class="df-aar__statetitle"><small>{{#str}}decisiontrace, mod_decisionforge{{/str}}</small><h3>{{#str}}howoutcomewasformed, mod_decisionforge{{/str}}</h3></div>
+            <div class="df-aar__routegrid">
+                {{#route}}
+                    <article class="df-aar__routeitem df-aar__routeitem--{{kind}}">
+                        <span class="df-aar__routenumber">{{number}}</span>
+                        <div class="df-aar__routehead"><small>{{kindlabel}}</small><h4>{{title}}</h4>{{#hasscore}}<strong>{{score}} / {{maxscore}}</strong>{{/hasscore}}</div>
+                        {{#haschoice}}<div><small>{{#str}}yourdecision, mod_decisionforge{{/str}}</small><p>{{{choice}}}</p></div>{{/haschoice}}
+                        {{#hasranking}}<div><small>{{#str}}yourpriorityorder, mod_decisionforge{{/str}}</small><p>{{ranking}}</p></div>{{/hasranking}}
+                        {{#hasopened}}<div><small>{{#str}}evidenceexamined, mod_decisionforge{{/str}}</small><p>{{openedevidence}}</p></div>{{/hasopened}}
+                        {{#hasresponse}}<div><small>{{#str}}yourreasoning, mod_decisionforge{{/str}}</small><p>{{{response}}}</p></div>{{/hasresponse}}
+                        {{#hasconsequence}}<div class="df-aar__routeconsequence"><small>{{#str}}consequence, mod_decisionforge{{/str}}</small><p>{{{consequence}}}</p></div>{{/hasconsequence}}
+                    </article>
+                {{/route}}
+            </div>
+        </section>
+        <div class="df-aar__actions"><a class="btn btn-outline-secondary" href="{{backurl}}">{{#str}}backtoactivity, mod_decisionforge{{/str}}</a>{{#canreattempt}}<form method="post" action="{{starturl}}"><input type="hidden" name="sesskey" value="{{sesskey}}"><button class="btn btn-primary" type="submit">{{#str}}runsimulationagain, mod_decisionforge{{/str}}</button></form>{{/canreattempt}}{{#reportaccess}}<a class="btn btn-link" href="{{reporturl}}">{{#str}}attemptreport, mod_decisionforge{{/str}}</a>{{/reportaccess}}</div>
+    </div>
+</div>

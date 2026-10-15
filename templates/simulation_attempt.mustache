@@ -1,0 +1,94 @@
+{{!
+    @template mod_decisionforge/simulation_attempt
+}}
+<div class="df-simapp" id="df-simapp" data-deadline="{{deadline}}">
+    <nav class="df-simapp__commandbar">
+        <div class="df-simapp__brand"><span>DF</span><div><small>{{missionlabel}}</small><strong>{{name}}</strong></div></div>
+        <div class="df-simapp__progress"><span><i style="width:{{progress}}%"></i></span><small>{{progresslabel}}</small></div>
+        {{#hastimer}}<div class="df-simapp__clock"><small>{{#str}}operationaltime, mod_decisionforge{{/str}}</small><strong data-region="countdown" aria-live="polite">--:--</strong></div>{{/hastimer}}
+        <a class="df-simapp__exit" href="{{exiturl}}" aria-label="{{#str}}exitsimulation, mod_decisionforge{{/str}}">×</a>
+    </nav>
+
+    <div class="df-simapp__workspace">
+        <aside class="df-simapp__timeline">
+            <small>{{#str}}operationroute, mod_decisionforge{{/str}}</small>
+            <ol>
+                {{#timeline}}
+                    <li class="{{#completed}}is-complete{{/completed}}{{#current}} is-current{{/current}}{{#pending}} is-pending{{/pending}}">
+                        <span>{{#completed}}✓{{/completed}}{{^completed}}{{number}}{{/completed}}</span>
+                        <div><small>{{kindlabel}}</small><strong>{{title}}</strong></div>
+                    </li>
+                {{/timeline}}
+            </ol>
+        </aside>
+
+        <section class="df-simapp__stage df-simapp__stage--{{kind}}">
+            <div class="df-simapp__stageindex"><span>{{stagenumber}}</span><i></i><small>{{kindlabel}}</small></div>
+            <article class="df-simapp__briefing">
+                <span class="df-simapp__signal"><i></i>{{#str}}incomingdevelopment, mod_decisionforge{{/str}}</span>
+                <h1>{{title}}</h1>
+                <div class="df-simapp__body">{{{body}}}</div>
+            </article>
+
+            <form action="{{submiturl}}" method="post" class="df-simapp__response" data-region="simulation-form">
+                <input type="hidden" name="id" value="{{id}}">
+                <input type="hidden" name="attemptid" value="{{attemptid}}">
+                <input type="hidden" name="stageid" value="{{stageid}}">
+                <input type="hidden" name="sesskey" value="{{sesskey}}">
+                {{#hasprompt}}<div class="df-simapp__prompt">{{{prompt}}}</div>{{/hasprompt}}
+
+                {{#isdecision}}
+                    <fieldset class="df-simapp__choices"><legend class="sr-only">{{#str}}chooseaction, mod_decisionforge{{/str}}</legend>
+                        {{#choices}}<label class="df-simapp__choice"><input type="radio" name="choiceid" value="{{id}}" required><span class="df-simapp__choiceletter">{{letter}}</span><span>{{{text}}}</span><i>→</i></label>{{/choices}}
+                    </fieldset>
+                {{/isdecision}}
+
+                {{#isevidence}}
+                    {{#hasrequiredevidence}}
+                        <div class="df-evidence-status" data-region="evidence-status">
+                            <div><small>{{#str}}evidencereviewstatus, mod_decisionforge{{/str}}</small><strong data-region="evidence-progress">{{evidenceprogress}}</strong></div>
+                            <p data-region="evidence-error" role="alert">{{evidenceincomplete}}</p>
+                        </div>
+                    {{/hasrequiredevidence}}
+                    <div class="df-simapp__evidencegrid">
+                        {{#evidence}}
+                            <article class="df-evidence" data-region="evidence-card" data-required="{{#required}}1{{/required}}{{^required}}0{{/required}}">
+                                <input class="df-evidence__check" id="df-evidence-check-{{id}}" type="checkbox" name="opened[]" value="{{id}}" aria-label="{{#str}}evidencereviewed, mod_decisionforge{{/str}}: {{title}}">
+                                <button class="df-evidence__trigger" type="button" data-region="evidence-toggle" aria-expanded="false" aria-controls="df-evidence-content-{{id}}">
+                                    <span class="df-evidence__top"><i>{{number}}</i><small>{{kindlabel}}</small>{{#critical}}<b>{{#str}}critical, mod_decisionforge{{/str}}</b>{{/critical}}</span>
+                                    <strong>{{title}}</strong>
+                                    <span class="df-evidence__open">{{#str}}openevidence, mod_decisionforge{{/str}} <i>↗</i></span>
+                                </button>
+                                <div class="df-evidence__content" id="df-evidence-content-{{id}}">{{{body}}}</div>
+                                <span class="df-evidence__reviewed">✓ {{#str}}evidencereviewed, mod_decisionforge{{/str}}</span>
+                            </article>
+                        {{/evidence}}
+                    </div>
+                {{/isevidence}}
+
+                {{#isprioritise}}
+                    <div class="df-priority" data-region="priority-list">
+                        {{#choices}}
+                            <div class="df-priority__item" draggable="true" data-choice-id="{{id}}">
+                                <span class="df-priority__grip">⠿</span><div>{{{text}}}</div>
+                                <label><small>{{#str}}priority, mod_decisionforge{{/str}}</small><select name="rank_{{id}}">{{#rankoptions}}<option value="{{value}}" {{#selected}}selected{{/selected}}>{{value}}</option>{{/rankoptions}}</select></label>
+                            </div>
+                        {{/choices}}
+                    </div>
+                {{/isprioritise}}
+
+                {{#isreflection}}<textarea name="response" rows="7" minlength="10" maxlength="5000" required placeholder="{{#str}}reflectionplaceholder, mod_decisionforge{{/str}}"></textarea>{{/isreflection}}
+                <button class="df-simapp__commit" type="submit"><span>{{#isbriefing}}{{#str}}enteroperation, mod_decisionforge{{/str}}{{/isbriefing}}{{#isevidence}}{{#str}}commitevidence, mod_decisionforge{{/str}}{{/isevidence}}{{#isdecision}}{{#str}}commitdecision, mod_decisionforge{{/str}}{{/isdecision}}{{#isprioritise}}{{#str}}commitpriority, mod_decisionforge{{/str}}{{/isprioritise}}{{#isreflection}}{{#str}}commitreflection, mod_decisionforge{{/str}}{{/isreflection}}</span><b>→</b></button>
+            </form>
+        </section>
+
+        <aside class="df-simapp__telemetry">
+            <div class="df-simapp__telemetryhead"><span></span><div><small>{{#str}}liveimpact, mod_decisionforge{{/str}}</small><strong>{{#str}}systemtelemetry, mod_decisionforge{{/str}}</strong></div></div>
+            <div class="df-gauge" style="--value:{{safety}}"><div><span>{{safety}}</span></div><p><strong>{{#str}}metricsafety, mod_decisionforge{{/str}}</strong><small>{{#str}}metriclivesignal, mod_decisionforge{{/str}}</small></p></div>
+            <div class="df-gauge" style="--value:{{compliance}}"><div><span>{{compliance}}</span></div><p><strong>{{#str}}metriccompliance, mod_decisionforge{{/str}}</strong><small>{{#str}}metriclivesignal, mod_decisionforge{{/str}}</small></p></div>
+            <div class="df-gauge" style="--value:{{trust}}"><div><span>{{trust}}</span></div><p><strong>{{#str}}metrictrust, mod_decisionforge{{/str}}</strong><small>{{#str}}metriclivesignal, mod_decisionforge{{/str}}</small></p></div>
+            <div class="df-gauge" style="--value:{{resources}}"><div><span>{{resources}}</span></div><p><strong>{{#str}}metricresources, mod_decisionforge{{/str}}</strong><small>{{#str}}metriclivesignal, mod_decisionforge{{/str}}</small></p></div>
+            <p class="df-simapp__telemetrynote">{{#str}}telemetrywarning, mod_decisionforge{{/str}}</p>
+        </aside>
+    </div>
+</div>

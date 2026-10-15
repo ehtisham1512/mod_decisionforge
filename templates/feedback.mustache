@@ -1,0 +1,27 @@
+{{!
+    @template mod_decisionforge/feedback
+}}
+<main class="decisionforge-feedback decisionforge-feedback--{{status}}">
+    <div class="decisionforge-feedback__glow" aria-hidden="true"></div>
+    <section class="decisionforge-feedbackcard" aria-labelledby="decisionforge-feedback-title">
+        <div class="decisionforge-feedbackcard__icon" aria-hidden="true">
+            <span>✓</span>
+        </div>
+        <span class="decisionforge-feedbackcard__eyebrow">{{#str}}decisionrecorded, mod_decisionforge{{/str}}</span>
+        <h1 id="decisionforge-feedback-title">{{statuslabel}}</h1>
+        <p class="decisionforge-feedbackcard__case">{{casetitle}}</p>
+
+        <div class="decisionforge-feedbackcard__decision">
+            <small>{{#str}}yourdecision, mod_decisionforge{{/str}}</small>
+            <div>{{{decision}}}</div>
+        </div>
+        {{#hasconsequence}}
+            <div class="decisionforge-feedbackcard__consequence">
+                <small>{{#str}}feedback, mod_decisionforge{{/str}}</small>
+                <div>{{{consequence}}}</div>
+            </div>
+        {{/hasconsequence}}
+        <div class="decisionforge-points"><strong>{{earned}}</strong><span>/ {{possible}} {{#str}}points, mod_decisionforge{{/str}}</span></div>
+        <a class="btn btn-primary btn-lg decisionforge-primary-action" href="{{nexturl}}">{{buttonlabel}} <span aria-hidden="true">→</span></a>
+    </section>
+</main>

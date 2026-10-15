@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/decisionforge/db" VERSION="2026081203" COMMENT="XMLDB file for mod_decisionforge"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+  <TABLES>
+    <TABLE NAME="decisionforge" COMMENT="Decision Forge activity configuration">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT=""/>
+        <FIELD NAME="intro" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="instructions" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="instructionsformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="experiencemode" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="quick"/>
+        <FIELD NAME="missionlabel" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="Live decision simulation"/>
+        <FIELD NAME="timeopen" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timeclose" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timelimit" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="attemptsallowed" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="grade" TYPE="number" LENGTH="10" DECIMALS="5" NOTNULL="true" DEFAULT="100"/>
+        <FIELD NAME="gradepass" TYPE="number" LENGTH="10" DECIMALS="5" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="grademethod" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="highest"/>
+        <FIELD NAME="feedbackmode" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="immediate"/>
+        <FIELD NAME="shufflecases" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="shuffleanswers" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1"/>
+        <FIELD NAME="showprogress" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1"/>
+        <FIELD NAME="requirejustification" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="requireconfidence" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="initialsafety" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="72"/>
+        <FIELD NAME="initialcompliance" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="68"/>
+        <FIELD NAME="initialtrust" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="74"/>
+        <FIELD NAME="initialresources" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="80"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="course" TYPE="foreign" FIELDS="course" REFTABLE="course" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="decisionforge_cases" COMMENT="Cases belonging to an activity">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="decisionforgeid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="title" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT=""/>
+        <FIELD NAME="scenario" TYPE="text" NOTNULL="true"/>
+        <FIELD NAME="scenarioformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="questiontext" TYPE="char" LENGTH="500" NOTNULL="true" DEFAULT=""/>
+        <FIELD NAME="points" TYPE="number" LENGTH="10" DECIMALS="5" NOTNULL="true" DEFAULT="10"/>
+        <FIELD NAME="position" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="active" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1"/>
+        <FIELD NAME="archived" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="activity" TYPE="foreign" FIELDS="decisionforgeid" REFTABLE="decisionforge" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="activityposition" UNIQUE="false" FIELDS="decisionforgeid, position"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="decisionforge_options" COMMENT="Decision options for each case">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="caseid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="optiontext" TYPE="text" NOTNULL="true"/>
+        <FIELD NAME="optiontextformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="score" TYPE="number" LENGTH="10" DECIMALS="5" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="consequence" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="consequenceformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="position" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="case" TYPE="foreign" FIELDS="caseid" REFTABLE="decisionforge_cases" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="caseposition" UNIQUE="false" FIELDS="caseid, position"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="decisionforge_attempts" COMMENT="Learner attempts">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="decisionforgeid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="attemptnumber" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="1"/>
+        <FIELD NAME="state" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="inprogress"/>
+        <FIELD NAME="mode" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="quick"/>
+        <FIELD NAME="currentcase" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="currentstageid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="snapshotjson" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="pathjson" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="rawscore" TYPE="number" LENGTH="12" DECIMALS="5" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="possiblepoints" TYPE="number" LENGTH="12" DECIMALS="5" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="finalgrade" TYPE="number" LENGTH="12" DECIMALS="5" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="safety" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="72"/>
+        <FIELD NAME="compliance" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="68"/>
+        <FIELD NAME="trust" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="74"/>
+        <FIELD NAME="resources" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="80"/>
+        <FIELD NAME="outcomecode" TYPE="char" LENGTH="50" NOTNULL="true" DEFAULT=""/>
+        <FIELD NAME="timestart" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timefinish" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="activity" TYPE="foreign" FIELDS="decisionforgeid" REFTABLE="decisionforge" REFFIELDS="id"/>
+        <KEY NAME="user" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="userattempt" UNIQUE="true" FIELDS="decisionforgeid, userid, attemptnumber"/>
+        <INDEX NAME="activitystate" UNIQUE="false" FIELDS="decisionforgeid, state"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="decisionforge_attempt_cases" COMMENT="Stable case and option order for an attempt">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="attemptid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="caseid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="caseposition" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="optionorder" TYPE="text" NOTNULL="true"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="attempt" TYPE="foreign" FIELDS="attemptid" REFTABLE="decisionforge_attempts" REFFIELDS="id"/>
+        <KEY NAME="case" TYPE="foreign" FIELDS="caseid" REFTABLE="decisionforge_cases" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="attemptposition" UNIQUE="true" FIELDS="attemptid, caseposition"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="decisionforge_responses" COMMENT="Learner responses to cases">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="attemptid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="caseid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="optionid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="justification" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="confidence" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="50"/>
+        <FIELD NAME="score" TYPE="number" LENGTH="12" DECIMALS="5" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timeanswered" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="attempt" TYPE="foreign" FIELDS="attemptid" REFTABLE="decisionforge_attempts" REFFIELDS="id"/>
+        <KEY NAME="case" TYPE="foreign" FIELDS="caseid" REFTABLE="decisionforge_cases" REFFIELDS="id"/>
+        <KEY NAME="option" TYPE="foreign" FIELDS="optionid" REFTABLE="decisionforge_options" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="attemptcase" UNIQUE="true" FIELDS="attemptid, caseid"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="decisionforge_simstages" COMMENT="Connected stages in a decision simulation">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="decisionforgeid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="title" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT=""/>
+        <FIELD NAME="stagekind" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="decision"/>
+        <FIELD NAME="body" TYPE="text" NOTNULL="true"/>
+        <FIELD NAME="bodyformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="prompt" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="promptformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="points" TYPE="number" LENGTH="10" DECIMALS="5" NOTNULL="true" DEFAULT="10"/>
+        <FIELD NAME="position" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="nextstageid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="active" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1"/>
+        <FIELD NAME="requireallcritical" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="activity" TYPE="foreign" FIELDS="decisionforgeid" REFTABLE="decisionforge" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="activityposition" UNIQUE="false" FIELDS="decisionforgeid, position"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="decisionforge_simchoices" COMMENT="Choices and metric consequences for simulation stages">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="stageid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="choicetext" TYPE="text" NOTNULL="true"/>
+        <FIELD NAME="choicetextformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="quality" TYPE="number" LENGTH="6" DECIMALS="2" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="consequence" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="consequenceformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="nextstageid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="safetyimpact" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="complianceimpact" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="trustimpact" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="resourcesimpact" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="targetrank" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="position" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="stage" TYPE="foreign" FIELDS="stageid" REFTABLE="decisionforge_simstages" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="stageposition" UNIQUE="false" FIELDS="stageid, position"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="decisionforge_simevidence" COMMENT="Evidence available inside simulation stages">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="stageid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="title" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT=""/>
+        <FIELD NAME="body" TYPE="text" NOTNULL="true"/>
+        <FIELD NAME="bodyformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="evidencekind" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="document"/>
+        <FIELD NAME="critical" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="position" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="stage" TYPE="foreign" FIELDS="stageid" REFTABLE="decisionforge_simstages" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="stageposition" UNIQUE="false" FIELDS="stageid, position"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="decisionforge_simresponses" COMMENT="Learner paths and responses through simulation stages">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="attemptid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="stageid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="responsesequence" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="stagekind" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="decision"/>
+        <FIELD NAME="choiceid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="response" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="rankingjson" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="openedjson" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="score" TYPE="number" LENGTH="12" DECIMALS="5" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="maxscore" TYPE="number" LENGTH="12" DECIMALS="5" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="consequence" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="safety" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="compliance" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="trust" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="resources" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timeanswered" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="attempt" TYPE="foreign" FIELDS="attemptid" REFTABLE="decisionforge_attempts" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="attemptsequence" UNIQUE="true" FIELDS="attemptid, responsesequence"/>
+        <INDEX NAME="attemptstage" UNIQUE="false" FIELDS="attemptid, stageid"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="decisionforge_aidrafts" COMMENT="AI simulation generation drafts and audit status">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="decisionforgeid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="prompt" TYPE="text" NOTNULL="true"/>
+        <FIELD NAME="settingsjson" TYPE="text" NOTNULL="true"/>
+        <FIELD NAME="draftjson" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="provider" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="openai"/>
+        <FIELD NAME="model" TYPE="char" LENGTH="100" NOTNULL="true" DEFAULT=""/>
+        <FIELD NAME="status" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="pending"/>
+        <FIELD NAME="responseid" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT=""/>
+        <FIELD NAME="errormessage" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="activity" TYPE="foreign" FIELDS="decisionforgeid" REFTABLE="decisionforge" REFFIELDS="id"/>
+        <KEY NAME="user" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="activitystatus" UNIQUE="false" FIELDS="decisionforgeid, status"/>
+        <INDEX NAME="usertime" UNIQUE="false" FIELDS="userid, timecreated"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>
